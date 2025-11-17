@@ -1,2 +1,0 @@
-# centra
-Headless CMS
