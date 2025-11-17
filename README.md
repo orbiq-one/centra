@@ -52,6 +52,12 @@ body: |
 > 🎉 Congrats!
 > Build & deploy your Dockerfile, and your CMS is live.
 
+## Request your first data
+```js
+const res = await fetch("<domain>/api/pages/home")
+const data = await res.json()
+```
+Done.
 # Environment Variables
 There a few env vars that can be configured
 
