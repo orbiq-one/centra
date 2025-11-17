@@ -25,7 +25,6 @@ func Register(r *chi.Mux) {
 	r.Get("/health", handleHealth)
 
 	r.Route("/api", func(api chi.Router) {
-		api.Get("/{collection}", handleGetCollection)
-		api.Get("/{collection}/{slug}", handleGetEntry)
+		api.Get("/*", handleContent)
 	})
 }
