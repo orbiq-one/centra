@@ -21,6 +21,8 @@ func contentRoot() string {
 	return "content"
 }
 
+func GetContentNode(path string) {}
+
 func GetCollection(collection string) ([]ContentRecord, error) {
 	dir := filepath.Join(contentRoot(), collection)
 

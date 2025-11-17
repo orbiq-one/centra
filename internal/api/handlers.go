@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/cheetahbyte/centra/internal/config"
 	"github.com/go-chi/chi/v5"
@@ -20,41 +21,47 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func handleGetCollection(w http.ResponseWriter, r *http.Request) {
-	collection := chi.URLParam(r, "collection")
-	items, err := config.GetCollection(collection)
-	if err != nil {
-		writeJSON(w, 500, map[string]any{
-			"error": err.Error(),
-		})
+func handleContent(w http.ResponseWriter, r *http.Request) {
+	path := chi.URLParam(r, "*")
+	path = strings.Trim(path, "/")
+
+	if path == "" {
+		writeJSON(w, http.StatusBadRequest, "Invalid content path")
 		return
 	}
+	parts := strings.SplitN(path, "/", 2)
+	collection := parts[0]
 
-	writeJSON(w, 200, map[string]any{
-		"collection": collection,
-		"items":      items,
-	})
-}
-
-func handleGetEntry(w http.ResponseWriter, r *http.Request) {
-	collection := chi.URLParam(r, "collection")
-	slug := chi.URLParam(r, "slug")
-
-	entry, err := config.GetEntry(collection, slug)
-	if err != nil {
-		if err == config.ErrNotFound {
-			writeJSON(w, 404, map[string]any{
-				"error":      "Not found",
-				"collection": collection,
-				"slug":       slug,
+	if len(parts) == 1 {
+		items, err := config.GetCollection(collection)
+		if err != nil {
+			writeJSON(w, 500, map[string]any{
+				"error": err.Error(),
 			})
 			return
 		}
-		writeJSON(w, 500, map[string]any{
-			"error": err.Error(),
-		})
-		return
-	}
 
-	writeJSON(w, 200, entry)
+		writeJSON(w, 200, map[string]any{
+			"collection": collection,
+			"items":      items,
+		})
+	} else {
+		slug := parts[1]
+		entry, err := config.GetEntry(collection, slug)
+		if err != nil {
+			if err == config.ErrNotFound {
+				writeJSON(w, 404, map[string]any{
+					"error":      "Not found",
+					"collection": collection,
+					"slug":       slug,
+				})
+				return
+			}
+			writeJSON(w, 500, map[string]any{
+				"error": err.Error(),
+			})
+			return
+		}
+		writeJSON(w, 200, entry)
+	}
 }
