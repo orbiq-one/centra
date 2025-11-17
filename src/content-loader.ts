@@ -7,7 +7,9 @@ export type ContentRecord = {
   [key: string]: unknown;
 }
 
-const CONTENT_ROOT = path.join(process.cwd(), "content");
+const CONTENT_ROOT =
+  process.env.CONTENT_ROOT ??
+  path.join(process.cwd(), "content");
 
 export async function getCollection(
   collection: string
