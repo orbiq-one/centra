@@ -1,4 +1,4 @@
-package crypt
+package helper
 
 import (
 	"crypto/ed25519"

@@ -6,7 +6,6 @@ import (
 
 	"github.com/cheetahbyte/centra/internal/api"
 	"github.com/cheetahbyte/centra/internal/config"
-	"github.com/cheetahbyte/centra/internal/crypt"
 	"github.com/cheetahbyte/centra/internal/helper"
 	"github.com/go-chi/chi/v5"
 )
@@ -22,7 +21,7 @@ func main() {
 
 	keyDir := config.GetKeysDir()
 
-	pubKey, err := crypt.EnsureKeys(keyDir)
+	pubKey, err := helper.EnsureKeys(keyDir)
 	if err != nil {
 		log.Fatal("Startup failed: ", err)
 	}
