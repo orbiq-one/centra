@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/cheetahbyte/centra/internal/api"
+	"github.com/cheetahbyte/centra/internal/config"
+	"github.com/cheetahbyte/centra/internal/crypt"
+	"github.com/cheetahbyte/centra/internal/helper"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -14,13 +16,20 @@ func main() {
 
 	api.Register(r)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
-	}
+	port := config.GetPort()
 
 	log.Printf("Centra API running on :%s\n", port)
-	err := http.ListenAndServe(":"+port, r)
+
+	keyDir := config.GetKeysDir()
+
+	pubKey, err := crypt.EnsureKeys(keyDir)
+	if err != nil {
+		log.Fatal("Startup failed: ", err)
+	}
+
+	helper.PrettyKey(pubKey)
+
+	err = http.ListenAndServe(":"+port, r)
 	if err != nil {
 		log.Fatal(err)
 	}

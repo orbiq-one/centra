@@ -18,7 +18,11 @@ func contentRoot() string {
 	if root := os.Getenv("CONTENT_ROOT"); root != "" {
 		return root
 	}
-	return "content"
+	return "/content"
+}
+
+func GetContentRoot() string {
+	return contentRoot()
 }
 
 func GetContentNode(path string) {}
