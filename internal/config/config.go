@@ -22,3 +22,10 @@ func GetPort() string {
 	}
 	return "3000"
 }
+
+func GetContentRoot() string {
+	if root := os.Getenv("CONTENT_ROOT"); root != "" {
+		return root
+	}
+	return "/content"
+}
