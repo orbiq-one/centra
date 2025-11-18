@@ -24,8 +24,11 @@ func main() {
 
 	repo := config.GetGitRepo()
 	if repo != "" {
-		helper.MakeSSHRepo(repo)
-		gitadapter.CloneRepo(repo, config.GetContentRoot())
+		url := helper.MakeSSHRepo(repo)
+		err := gitadapter.CloneRepo(url, config.GetContentRoot())
+		if err != nil {
+			log.Fatal("Clone Repo failed: ", err)
+		}
 	}
 
 	pubKey, err := helper.EnsureKeys(keyDir)

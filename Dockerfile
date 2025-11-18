@@ -46,6 +46,7 @@ RUN mkdir -p /etc/ssh && \
 
 # Prepare a writable keys dir for appuser
 RUN mkdir -p /keys && chown 10001:10001 /keys
+RUN mkdir -p /content && chown 10001:10001 /content
 
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
