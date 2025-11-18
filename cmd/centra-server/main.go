@@ -6,6 +6,7 @@ import (
 
 	"github.com/cheetahbyte/centra/internal/api"
 	"github.com/cheetahbyte/centra/internal/config"
+	gitadapter "github.com/cheetahbyte/centra/internal/git-adapter"
 	"github.com/cheetahbyte/centra/internal/helper"
 	"github.com/go-chi/chi/v5"
 )
@@ -20,6 +21,12 @@ func main() {
 	log.Printf("Centra API running on :%s\n", port)
 
 	keyDir := config.GetKeysDir()
+
+	repo := config.GetGitRepo()
+	if repo != "" {
+		helper.MakeSSHRepo(repo)
+		gitadapter.CloneRepo(repo, config.GetContentRoot())
+	}
 
 	pubKey, err := helper.EnsureKeys(keyDir)
 	if err != nil {
