@@ -22,6 +22,11 @@ func main() {
 
 	keyDir := config.GetKeysDir()
 
+	pubKey, err := helper.EnsureKeys(keyDir)
+	if err != nil {
+		log.Fatal("Startup failed: ", err)
+	}
+
 	repo := config.GetGitRepo()
 	if repo != "" {
 		url := helper.MakeSSHRepo(repo)
@@ -29,11 +34,6 @@ func main() {
 		if err != nil {
 			log.Fatal("Clone Repo failed: ", err)
 		}
-	}
-
-	pubKey, err := helper.EnsureKeys(keyDir)
-	if err != nil {
-		log.Fatal("Startup failed: ", err)
 	}
 
 	helper.PrettyKey(pubKey)
