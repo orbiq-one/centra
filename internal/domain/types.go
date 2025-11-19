@@ -9,6 +9,6 @@ type CORSConfig struct {
 	AllowedMethods   []string
 	AllowedHeaders   []string
 	ExposedHeaders   []string
-	MaxAge           int64
+	MaxAge           int
 	AllowCredentials bool
 }
