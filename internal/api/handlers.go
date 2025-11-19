@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cheetahbyte/centra/internal/config"
+	"github.com/cheetahbyte/centra/internal/content"
 	"github.com/cheetahbyte/centra/internal/domain"
 	gitadapter "github.com/cheetahbyte/centra/internal/git-adapter"
 	"github.com/go-chi/chi/v5"
@@ -50,7 +51,27 @@ func handleContent(w http.ResponseWriter, r *http.Request) {
 		})
 	} else {
 		slug := parts[1]
+		if config.GetExperimental("caching") {
+			entry, err := content.GetEntry(collection, slug)
+			if err != nil {
+				if err == config.ErrNotFound {
+					writeJSON(w, 404, map[string]any{
+						"error":      "Not found",
+						"collection": collection,
+						"slug":       slug,
+					})
+					return
+				}
+				writeJSON(w, 500, map[string]any{
+					"error": err.Error(),
+				})
+				return
+			}
+			writeJSON(w, 200, entry)
+		}
+
 		entry, err := config.GetEntry(collection, slug)
+
 		if err != nil {
 			if err == config.ErrNotFound {
 				writeJSON(w, 404, map[string]any{

@@ -102,7 +102,12 @@ func GetCorsAllowCredentials() bool {
 }
 
 // this generic function returns the raw object
-func GetExperimental(featureName string) string {
+func GetExperimental(featureName string) bool {
 	raw := os.Getenv(fmt.Sprintf("EXPERIMENTAL_%s", strings.ToUpper(featureName)))
-	return raw
+	switch raw {
+	case "true":
+		return true
+	default:
+		return false
+	}
 }
