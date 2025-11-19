@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -92,6 +93,17 @@ func GetCorsMaxAge() int {
 
 func GetCorsAllowCredentials() bool {
 	raw := os.Getenv("CORS_ALLOW_CREDENTIALS")
+	switch raw {
+	case "true":
+		return true
+	default:
+		return false
+	}
+}
+
+// this generic function returns the raw object
+func GetExperimental(featureName string) bool {
+	raw := os.Getenv(fmt.Sprintf("EXPERIMENTAL_%s", strings.ToUpper(featureName)))
 	switch raw {
 	case "true":
 		return true

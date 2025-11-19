@@ -6,6 +6,7 @@ import (
 
 	"github.com/cheetahbyte/centra/internal/api"
 	"github.com/cheetahbyte/centra/internal/config"
+	"github.com/cheetahbyte/centra/internal/content"
 	"github.com/cheetahbyte/centra/internal/helper"
 	"github.com/go-chi/chi/v5"
 )
@@ -16,6 +17,11 @@ func main() {
 	api.Register(r)
 
 	port := config.GetPort()
+	if config.GetExperimental("caching") {
+		if err := content.LoadAll(config.GetContentRoot()); err != nil {
+			panic(err)
+		}
+	}
 
 	log.Printf("Centra API running on :%s\n", port)
 

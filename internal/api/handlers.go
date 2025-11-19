@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/cheetahbyte/centra/internal/cache"
 	"github.com/cheetahbyte/centra/internal/config"
+	"github.com/cheetahbyte/centra/internal/content"
 	"github.com/cheetahbyte/centra/internal/domain"
 	gitadapter "github.com/cheetahbyte/centra/internal/git-adapter"
 	"github.com/go-chi/chi/v5"
@@ -16,6 +18,12 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(v)
+}
+
+func writeBinaryJSON(w http.ResponseWriter, status int, v []byte) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(v)
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +58,14 @@ func handleContent(w http.ResponseWriter, r *http.Request) {
 		})
 	} else {
 		slug := parts[1]
+		if config.GetExperimental("caching") {
+			bytes := content.GetEntry(collection, slug)
+			writeBinaryJSON(w, 200, bytes)
+			return
+		}
+
 		entry, err := config.GetEntry(collection, slug)
+
 		if err != nil {
 			if err == config.ErrNotFound {
 				writeJSON(w, 404, map[string]any{
@@ -84,15 +99,28 @@ func handleWebHook(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	// TODO: use env var to select the branch which should be used
+
 	if whData.Ref != "refs/heads/main" {
 		w.WriteHeader(http.StatusAccepted)
 		return
 	}
 
-	err := gitadapter.UpdateRepo(config.GetContentRoot())
-	if err != nil {
-		fmt.Println("error updating repo: ", err.Error())
-	}
+	contentRoot := config.GetContentRoot()
+
 	w.WriteHeader(http.StatusAccepted)
+
+	go func(wh domain.WebhookData, root string) {
+		if err := gitadapter.UpdateRepo(root); err != nil {
+			fmt.Println("error updating repo:", err)
+			return
+		}
+
+		cache.InvalidateAll()
+
+		if err := content.LoadAll(root); err != nil {
+			fmt.Println("error loading content:", err)
+			return
+		}
+	}(whData, contentRoot)
+
 }
