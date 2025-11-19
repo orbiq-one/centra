@@ -91,9 +91,16 @@ Done.
 There a few env vars that can be configured
 
 | Variable | Description | Default |
-|----------|-----------|----------|
-| `PORT`   | sets the port on which the webserver starts.    | `3000`   |
-| `CONTENT_ROOT`  | sets the directory where the server will look for content.  | `/content`   |
-| `KEYS_DIR`  | sets the directory where the server will place the ssh keys  | `/keys`   |
-| `GITHUB_REPO_URL`  | sets the github repo which from which the content is served  | NONE   |
-| `EXPERIMENTAL_CACHING`  | enables the new caching method. all files are cached on start and served from memory. | false   |
+|----------|-------------|----------|
+| `PORT` | sets the port on which the webserver starts | `3000` |
+| `CONTENT_ROOT` | sets the directory where the server will look for content | `/content` |
+| `KEYS_DIR` | sets the directory where the server will place the ssh keys | `/keys` |
+| `GITHUB_REPO_URL` | sets the GitHub repo from which the content is served | _none_ |
+| `EXPERIMENTAL_CACHING` | enables the new caching method — all files are cached on start and served from memory | `false` |
+| `CORS_ALLOWED_ORIGINS` | list of allowed origins | `*` |
+| `CORS_ALLOWED_METHODS` | list of allowed methods | `["GET","HEAD","OPTIONS"]` |
+| `CORS_ALLOWED_HEADERS` | list of allowed request headers | `*` |
+| `CORS_EXPOSED_HEADERS` | list of headers exposed to the browser | `["Cache-Control","Content-Language","Content-Length","Content-Type","Expires","Last-Modified"]` |
+| `CORS_ALLOW_CREDENTIALS` | whether credentials (cookies/auth headers) are allowed | `false` |
+| `CORS_MAX_AGE` | max age of preflight cache (in seconds) | `360` |
+
