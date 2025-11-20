@@ -93,6 +93,7 @@ There a few env vars that can be configured
 | Variable | Description | Default |
 |----------|-------------|----------|
 | `PORT` | sets the port on which the webserver starts | `3000` |
+| `CENTRA_API_KEY` | provided a string here will set the key used to protect the content api  | NONE |
 | `CONTENT_ROOT` | sets the directory where the server will look for content | `/content` |
 | `KEYS_DIR` | sets the directory where the server will place the ssh keys | `/keys` |
 | `GITHUB_REPO_URL` | sets the GitHub repo from which the content is served | _none_ |
@@ -103,4 +104,7 @@ There a few env vars that can be configured
 | `CORS_EXPOSED_HEADERS` | list of headers exposed to the browser | `["Cache-Control","Content-Language","Content-Length","Content-Type","Expires","Last-Modified"]` |
 | `CORS_ALLOW_CREDENTIALS` | whether credentials (cookies/auth headers) are allowed | `false` |
 | `CORS_MAX_AGE` | max age of preflight cache (in seconds) | `360` |
-
+| `SSH_PRIVATE_KEY` | ssh private key used for communication with git | NONE |
+| `SSH_PUBLIC_KEY` | ssh public key used for communication with git | NONE |
+| `LOG_LEVEL` | sets the log level | `INFO` |
+| `LOG_STRUC` | turns off pretty printing of the logs and logs in plain json  | `false` |
