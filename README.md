@@ -105,3 +105,5 @@ There a few env vars that can be configured
 | `CORS_MAX_AGE` | max age of preflight cache (in seconds) | `360` |
 | `SSH_PRIVATE_KEY` | ssh private key used for communication with git | NONE |
 | `SSH_PUBLIC_KEY` | ssh public key used for communication with git | NONE |
+| `LOG_LEVEL` | sets the log level | `INFO` |
+| `LOG_STRUC` | turns off pretty printing of the logs and logs in plain json  | `false` |
