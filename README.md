@@ -93,6 +93,7 @@ There a few env vars that can be configured
 | Variable | Description | Default |
 |----------|-------------|----------|
 | `PORT` | sets the port on which the webserver starts | `3000` |
+| `CENTRA_API_KEY` | provided a string here will set the key used to protect the content api  | NONE |
 | `CONTENT_ROOT` | sets the directory where the server will look for content | `/content` |
 | `KEYS_DIR` | sets the directory where the server will place the ssh keys | `/keys` |
 | `GITHUB_REPO_URL` | sets the GitHub repo from which the content is served | _none_ |
