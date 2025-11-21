@@ -50,3 +50,10 @@ func InvalidateAll() {
 
 	ROOT_NODE = NewNode("root")
 }
+
+func GetCacheStats() (int, int64) {
+	mu.RLock()
+	defer mu.RUnlock()
+
+	return ROOT_NODE.calculateStats()
+}

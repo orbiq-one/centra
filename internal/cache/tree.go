@@ -18,6 +18,21 @@ func NewNode(name string) *Node {
 	}
 }
 
+func (n *Node) calculateStats() (count int, totalSize int64) {
+	if len(n.data) > 0 {
+		count = 1
+		totalSize = int64(len(n.data))
+	}
+
+	for _, child := range n.children {
+		c, s := child.calculateStats()
+		count += c
+		totalSize += s
+	}
+
+	return count, totalSize
+}
+
 func (n *Node) GetData() []byte {
 	return n.data
 }

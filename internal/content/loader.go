@@ -52,5 +52,7 @@ func LoadAll(contentDir string) error {
 	})
 
 	logger.Info().Int("files", count).Msg("cached files into tree")
+	nodes, size := cache.GetCacheStats()
+	logger.Debug().Int("nodes", nodes).Float64("MB", float64(size)/1024/1024).Msg("tree stats")
 	return err
 }
